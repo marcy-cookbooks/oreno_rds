@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.4
+
+suites:
+  - name: default
+    driver:
+      customize:
+        memory: 1024
+    run_list:
+      - recipe[oreno_rds::default]
+      - recipe[oreno_rds::sample_cnf]
+    attributes:
