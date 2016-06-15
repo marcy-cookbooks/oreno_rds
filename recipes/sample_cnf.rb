@@ -1,5 +1,12 @@
-oreno_rds_cnf "sample" do
+
+rds_parameters "sample" do
   params({
+    'symbolic-links'             => 0,
+    'skip_name_resolve'          => nil,
+    'gtid-mode'                  => 'ON',
+    'log-bin'                    => nil,
+    'log-slave-updates'          => nil,
+    'enforce-gtid-consistency'   => 'ON',
     'default_storage_engine'     => "InnoDB",
     'binlog_cache_size'          => 32768,
     'binlog_format'              => "MIXED",
@@ -22,14 +29,8 @@ oreno_rds_cnf "sample" do
     'sync_binlog'                => 1,
     'table_open_cache_instances' => 16,
     'thread_stack'               => 262144,
-    'character_set_server'       => "utf8mb4"
-  })
-end
-
-oreno_rds_autocnf "sample" do
-  apply_immediately true
-  params({
-    'innodb_buffer_pool_size' => 3.0 / 4.0,
-    'max_connections' => 1.0 / 12582880.0
+    'character_set_server'       => "utf8mb4",
+    'innodb_buffer_pool_size'    => 'DBInstanceClassMemory * 3 / 4',
+    'max_connections'            => 'DBInstanceClassMemory * 1 / 12582880'
   })
 end
