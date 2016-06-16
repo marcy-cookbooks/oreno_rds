@@ -1,8 +1,6 @@
 [mysqld]
 datadir=<%= @datadir %>
 socket=<%= @socket %>
-log-error=<%= @log_error %>
-pid-file=<%= @pid_file %>
 
 server_id=<%= @server_id %>
 log-bin=mysql-bin
@@ -13,8 +11,18 @@ master_info_repository=TABLE
 relay_log_info_repository=TABLE
 report_host=<%= @report_host %>
 
+<% if @server_type == 'master' %>
+plugin-load=rpl_semi_sync_master=semisync_master.so
+rpl_semi_sync_master_enabled = 1
+<% elsif @server_type == 'standby' %>
+plugin-load=rpl_semi_sync_slave=semisync_slave.so
+rpl_semi_sync_slave_enabled = 1
+<% else @server_type == 'slave' %>
+rpl_semi_sync_slave_enabled = 0
+<% end %>
+
 !includedir /etc/mysql.d
 
 [mysqld_safe]
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
+log-error=<%= @log_error %>
+pid-file=<%= @pid_file %>
